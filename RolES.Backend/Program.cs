@@ -1,3 +1,5 @@
+using RolES.Backend.DTOs;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
@@ -19,9 +21,9 @@ app.MapGet("/", () => // Metodo sem nome
     return Results.Ok(new { Message = "Servidor está online.", Data = dataResposta});
 });
 
-app.MapPost("/usuario", () =>
+app.MapPost("/usuario", (CadastroUsuarioDto requestBody) =>
 {
-    return Results.Created();
+    return Results.Ok(requestBody);
 });
 
 app.Run();
