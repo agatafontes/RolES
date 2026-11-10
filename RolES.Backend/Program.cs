@@ -1,12 +1,14 @@
 using MySql.Data.MySqlClient;
 using RolES.Backend.Dados;
 using RolES.Backend.DTOs;
+using RolES.Backend.Servicos;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
-
+ 
 builder.Services.AddSingleton<BdConexao>();
+builder.Services.AddScoped<UsuarioServicos>();
 
 var app = builder.Build();
 
@@ -25,22 +27,29 @@ app.MapGet("/", () => // Metodo sem nome
     return Results.Ok(new { Message = "Servidor está online.", Data = dataResposta});
 });
 
-app.MapPost("/usuario", async (CadastroUsuarioDto requestBody, BdConexao conexao) =>
+app.MapPost("/usuario", async (CadastroUsuarioDto requestBody, UsuarioServicos uServicos) =>
 {
-    var sql = "INSERT INTO usuarios(nome, email, nascimento, senha, cargo) VALUE(@nome, @email, @nascimento, @senha, 'comum')";
+    try
+    {
+        var linhasAfetadas = await uServicos.AdicionarAsync(requestBody);
+        if (linhasAfetadas > 0) return Results.Created();
 
-    var mySqlComando = new MySqlCommand(sql, await conexao.CriarConexaoAsync());
-
-    mySqlComando.Parameters.AddWithValue("@nome", requestBody.Nome);
-    mySqlComando.Parameters.AddWithValue("@email", requestBody.Email);
-    mySqlComando.Parameters.AddWithValue("@nascimento", requestBody.Nascimento);
-    mySqlComando.Parameters.AddWithValue("@senha", requestBody.Senha);
-
-     var linhasAfetadas= await mySqlComando.ExecuteNonQueryAsync();
-
-     if (linhasAfetadas > 0) return Results.Created();
-    
-    return Results.Conflict(new { Mensagem = "Houve um erro ao tentar criar o seu usuário. Tente novamente mais tarde"}); 
+        return Results.Conflict(new
+            { Mensagem = "Houve um erro ao tentar criar o seu usuári+" + "o. Tente novamente mais tarde" });
+    }
+    catch (MySqlException exception)
+    {
+        if (exception.Number == 1062)
+            return Results.BadRequest(new
+            {
+                Mensagem = "O e-mail do usuário já foi cadastrado."
+            });
+        throw;
+    }
+    catch
+    {
+        return Results.InternalServerError(500);
+    }
 });
 
 app.Run();
