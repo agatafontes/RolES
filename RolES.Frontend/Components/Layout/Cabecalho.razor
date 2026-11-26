@@ -3,31 +3,42 @@
     <div id="logo-cabacalho">
         <a class="navbar-brand fs-1" href="/"> RolES</a>
     </div>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#cabecalhoColapsado" aria-controls="cabecalhoColapsado" aria-expanded="False" aria-label="Abrir menu de navegação">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-    <div class="container justify-content-start w-50">
-        <form class="d-flex input-group" id="barra-busca">
-            <span class="input-group-text">🔍</span>
-            <input class="form-control" type="search" placeholder="Buscar eventos..."/>
-        </form>
+    <div class="collapse navbar-collapse" id="cabecalhoColapsado">
+        <div class="container d-flex  flex-column flex-md-row gap-1 col-12 col-md-6 p-0">
+            <form class="d-flex input-group" id="barra-busca">
+                <span class="input-group-text">
+                    <i class="bi bi-search text-primary"></i>
+                </span>
+                <input class="form-control" type="search" placeholder="Buscar eventos..."/>
+            </form>
 
-        <form id="filtro-licalização" class="d-flex input-group">
-            <span class="input-group-text">📍</span>
-            <select class="form-select">
-                <option>Todos os lugares</option>
-                <option>Serra</option>
-                <option>Vitória</option>
-            </select>
-        </form>
-    </div>
+            <form id="filtro-licalização" class="d-flex input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-pin-fill text-danger"></i>
+                </span>
+                <select class="form-select">
+                    <option>Todos os lugares</option>
+                    <option>Serra</option>
+                    <option>Vitória</option>
+                </select>
+            </form>
+        </div>
 
-    <div id="links-navegação" class="d-flex gap-4 justify-content-evenly">
-        <NavLink class="nav-link" href="#criar_eventos">Criar Evento</NavLink>
-        <NavLink class="nav-link" href="#agenda">Agenda</NavLink>
-        <NavLink class="nav-link" href="#meus_eventos">Meus Eventos</NavLink>
-    </div>
+        <ul id="links-navegação" class="navbar-nav me-3">
+            <NavLink class="nav-link" href="#criar_eventos">Criar Evento</NavLink>
+            <NavLink class="nav-link" href="#agenda">Agenda</NavLink>
+            <NavLink class="nav-link" href="#meus_eventos">Meus Eventos</NavLink>
+        </ul>
 
-    <div id="botao-entrar" class="btn btn-primary">
-        Entrar
+        <NavLink href="/login" id="botao-entrar" class="btn btn-primary col-12 col-md-1">
+            Fazer login 
+            <i class="bi bi-box-arrow-right ms-2"></i>
+        </NavLink>
     </div>
 
 </header>
